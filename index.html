@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', monospace;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0) skew(0deg); }
+  20% { transform: translate(-2px, 2px) skew(2deg); }
+  40% { transform: translate(-2px, -2px) skew(-2deg); }
+  60% { transform: translate(2px, 2px) skew(-1deg); }
+  80% { transform: translate(2px, -2px) skew(1deg); }
+  100% { transform: translate(0) skew(0deg); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+  25% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
+  50% { transform: translateY(0) rotateX(0deg) rotateY(2deg); }
+  75% { transform: translateY(10px) rotateX(-2deg) rotateY(0deg); }
+}
+
+@keyframes hologram {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+html, body {
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1000px;
+  background: linear-gradient(-45deg, #000000, #1a0f3c, #000000, #2a004f);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transform-style: preserve-3d;
+}
+
+.achievement-card {
+  position: relative;
+  width: min(90vw, 400px);
+  height: min(90vh, 700px);
+  padding: clamp(20px, 3vh, 40px);
+  background: rgba(5, 0, 20, 0.9);
+  border-radius: 15px;
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2vh;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  animation: float 6s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(0, 255, 242, 0.2),
+              0 0 60px rgba(255, 0, 238, 0.2);
+}
+
+.achievement-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #ff00ee, #00ff9d, #ff00ee);
+  opacity: 0.1;
+  transform: translateZ(-10px);
+}
+
+.hologram-effect {
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(45deg,
+    transparent 0%,
+    rgba(0, 255, 242, 0.1) 45%,
+    rgba(0, 255, 242, 0.2) 50%,
+    rgba(0, 255, 242, 0.1) 55%,
+    transparent 100%
+  );
+  transform: translateZ(-5px);
+  animation: hologram 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.achievement-title {
+  font-size: clamp(1.2rem, 4vh, 2rem);
+  color: #00fff2;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-top: 2vh;
+  text-shadow: 0 0 20px rgba(0, 255, 242, 0.5),
+               0 0 40px rgba(0, 255, 242, 0.3);
+  position: relative;
+  transform: translateZ(20px);
+}
+
+.followers-display {
+  background: rgba(0, 255, 242, 0.05);
+  padding: clamp(10px, 2vh, 30px);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 242, 0.2);
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(30px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.followers-count {
+  font-size: clamp(2.5rem, 10vh, 5rem);
+  font-weight: 700;
+  text-align: center;
+  color: #00fff2;
+  text-shadow: 0 0 20px rgba(0, 255, 242, 0.5),
+               2px 2px 0px #ff00ee;
+  transform-style: preserve-3d;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 1.5vh, 20px);
+  margin: 2vh 0;
+  transform-style: preserve-3d;
+}
+
+.stat-item {
+  background: rgba(0, 255, 242, 0.05);
+  padding: clamp(8px, 1.5vh, 20px);
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid rgba(0, 255, 242, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(25px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.stat-item:hover {
+  transform: translateZ(35px) scale(1.05);
+  background: rgba(0, 255, 242, 0.1);
+  border-color: #00fff2;
+}
+
+.stat-value {
+  font-size: clamp(1rem, 3vh, 1.5rem);
+  color: #00fff2;
+  margin-bottom: 5px;
+  text-shadow: 2px 2px 0px #ff00ee;
+}
+
+.stat-label {
+  font-size: clamp(0.6rem, 1.5vh, 0.8rem);
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.quantum-footer {
+  margin-top: auto;
+  padding: clamp(10px, 2vh, 25px);
+  background: rgba(0, 255, 242, 0.05);
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid rgba(0, 255, 242, 0.2);
+  transform: translateZ(15px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.quantum-badge {
+  display: inline-block;
+  padding: clamp(8px, 1.5vh, 15px) clamp(12px, 2vh, 25px);
+  background: rgba(0, 255, 242, 0.1);
+  border-radius: 30px;
+  font-size: clamp(0.7rem, 1.8vh, 1rem);
+  color: #00fff2;
+  margin-top: 1vh;
+  border: 1px solid rgba(0, 255, 242, 0.3);
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(20px);
+}
+
+.meta-info {
+  margin-top: 1vh;
+  font-size: clamp(0.6rem, 1.5vh, 0.8rem);
+  color: rgba(0, 255, 242, 0.8);
+}
+
+@media (max-width: 380px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .achievement-card {
+    padding: 15px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="achievement-card">
+      <div class="hologram-effect"></div>
+      <div class="scanline"></div>
+
+      <h1 class="achievement-title" data-text="Neural Milestone">HussainXPython</h1>
+
+      <div class="followers-display">
+        <div class="followers-count">100</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">Following</div>
+          <div class="stat-label">250</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">Followers</div>
+          <div class="stat-label">100</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">Likes</div>
+          <div class="stat-label">1060+</div>
+        </div>
+      </div>
+
+      <div class="quantum-footer">
+        <div style="color: #00fff2; font-size: clamp(0.8rem, 2vh, 1rem);">
+          Thank you for being a part of this adventure 🙏
+        </div>
+        <div class="quantum-badge">Thank You So Much 💖</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
